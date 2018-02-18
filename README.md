@@ -1,16 +1,62 @@
-# ETHDenver
-Hackathon repository for ethdenver
+# Elkrem: Development board for IOT & Ethereum
 
-Welcome
+Elkrem makes it easy for blockchain developers and hardware engineers to build Ethereum connected IOT products.
 
-This repo is inteded to handle the submissions for 2 of the upcoming ETHDenver bounties.
+# How?
 
-Because we want to teach and encourage the same open source principles that underpin blockchains and decentralized networks more generally, we have decided to adopt an approach where each team will create their own branch from an issue to submit to the competition.
+We built a hardware development board that allows Ethereum developers to integrate Dapps with hardware IOT products in an easy way without having deep knowledge in hardware development, it also allows electrical engineers and hardware developers to connect Ethereum blockchain to their IOT products without having deep knowledge of how the Ethereum blockchain works. So they both can trigger actuators through smart contracts and log sensors data to smart contracts as well. We also integrated Whisper to it, so our users can monitor and control hardware products and projects using small whisper messages through Status app! :)
 
-This achieves two primary aims. First, it ensures that all work done during the hackathon remains open source, like all the best code there is. Secondly, it introduces participants and other developers to GitHub and the open source community more generally and equips them with the skills to use resources like this for all future projects, whether they be specifically within the blockchain space, or outside it in the wider programming, FOSS community.
+# Sample Code
 
-This is not to say that participants and other developers cannot take what they build in the hackathon, extend it and sell it onwards in a more proprietary fashion - all IP remains with the people who write the actual code. It's just our gentle way of encouraging people just entering the industry to adopt the best practices around how they work on and share their software.
+Here is a sample code for our demo. It lets Status app users control phyisical hardware (i.e. light bulbs) using Ethereum transactions and Whisper messages right from the app.
 
-Please check out our Open Issues in this repository to work on a project with Status for the ETHDenver hackathon and come by our booth if you have any other questions! 
+```
+void paymentCallback(EthereumTransaction* transaction)
+{
+    float value = transaction->getValue();
+    if(value>=0.1){
+      digitalWrite(4,HIGH);
+      Elkrem.delay(2000);
+      digitalWrite(4,LOW);
+  }
+}
 
-Please note: We also have 2 more bounties in this hackathon located in our go-status fork, they have the `ETHDenver` Label! 
+void statusCallback(WhisperMessage* whisperMessage)
+{
+    char payload[3]= "";
+    whisperMessage->getPayload(payload);
+    if(!strcmp(payload,"On"))
+      digitalWrite(4,HIGH);
+    else if(!strcmp(payload,"Off"))
+      digitalWrite(4,LOW);
+}
+
+void setup() {
+    Elkrem.init();
+    pinMode(4,OUTPUT);
+
+    // Subscribe to new Ethereum transaction callback to a specific address.
+    Ethereum.onNewTransaction(&paymentCallback);
+    Ethereum.track("0x03FC1b1F0A72f43c526a27DbF51fB9c7a98666e6");
+
+	// Subscribe to new Whisper messages callback to using a specific private key.
+    Status.onNewMessage(&statusCallback);
+    Status.subscribe("0x61e2225acef5ecfa81652896fb17a29835aa13e6cc0f89c640d2e60e9255ea6e");
+}
+
+void loop() {
+  Elkrem.run();
+}
+
+```
+
+# Project Status
+The PoC we did is fully functional, we were able to control a 110v light bulb using 'on' and 'off' messages from Status app, and even trigger actions when an Ethereum payment is sent from the chat window.
+
+# Demo Video
+
+[![Elkrem Video](https://i.imgur.com/ksRyffR.png)](https://www.youtube.com/watch?v=qR6AP10LGts)
+
+# Source Code
+
+You can access all of the source code for this project [here](https://github.com/iSsO/elkrem-ethdenver-submission).
