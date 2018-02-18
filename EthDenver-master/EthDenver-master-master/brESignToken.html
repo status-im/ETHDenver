@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+<head>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"
+      integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+      crossorigin="anonymous"></script>
+
+<!-- have to use web3 0.20 (the same version as the one used in remix.  using web3 0.18 doesn't work. -->
+<script src="web3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="css/nav-underline.css" rel="stylesheet">
+<link href="css/material-icon-size.css" rel="stylesheet">
+<link href="css/profile-image.css" rel="stylesheet">
+<link href="css/main.css" rel="stylesheet">
+
+<title>Fan Coin</title>
+
+</head>
+
+<body>
+    <!-- nav -->
+    <!-- <div class="background">
+        Fan Coin
+    </div> -->
+    <nav class="navbar navbar-fixed-top">
+        <div class="navbar-container">
+            <div class="navbar-header">
+              <!-- <button id="nav-toggle-button" type="button" class="text-white navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button> -->
+
+            <button id="nav-toggle-button" type="button" class="text-white navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <i class="material-icons">dehaze</i>
+            </button>
+
+              <a class="navbar-brand text-white" href="#">Fan Coin</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <form class="navbar-form navbar-right">
+                <div class="">
+                    <ul>
+                        <li class="nav-link active-link">
+                            <a href="#">Home
+                            </a>
+                            <div class="underline"></div>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">About Us</a>
+                            <div class="underline"></div>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">Contact</a>
+                            <div class="underline"></div>
+                        </li>
+                    </ul>
+                </div>
+
+              </form>
+            </div><!--/.navbar-collapse -->
+        </div>
+    </nav>
+
+
+
+
+
+    <!-- content -->
+    <div class="container" style="padding-top:1em;">
+        <div class="paper card">
+            <!-- ethan profile image -->
+            <div class="row">
+                <div class="profile-header-container">
+                    <div class="profile-header-img">
+                        <img class="img-circle" src="https://scontent.fapa1-1.fna.fbcdn.net/v/t1.0-1/p160x160/10603351_10100327685008484_5911941575418837546_n.jpg?oh=5a4ed337a1218a2b7f019a519df30eb5&amp;oe=5B01DFD5"  width="50" height="50"/>
+                        <!-- badge -->
+                        <div class="rank-label-container">
+                            <span class="label label-default rank-label">
+                                <img style="padding-bottom: 20px" src="img/white-logo.png">
+                                <!-- <i class="material-icons md-14">accessibility</i>
+                                <i class="material-icons md-14">accessibility</i>
+                                <i class="material-icons md-14">accessibility</i>
+                                <i class="material-icons md-14">accessibility</i>
+                                <i class="material-icons md-14">accessibility</i> -->
+                            </span>
+                        </div>
+                        <h3 class="bolder text-center">Ethan Fan</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- card descriptions -->
+            <div class="row text-center">
+                <!-- <div class="cards"> -->
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="card card-3">
+                            <h3 class="">3</h3>
+                            <!-- <i class="material-icons">bubble_chart</i> -->
+                            <h5 class="small">Coins Owned</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="card card-3">
+                            <h3 class="">$3.05</h3>
+                            <!-- i class="material-icons">bubble_chart</i> -->
+                            <h5 class="small">Total Value</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="card card-3">
+                            <h3 class="">+12%</h3>
+                            <h5 class="small">Percentage Change</h5>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <label>Your Address: </label>
+                </div>
+
+                <div class="row">
+                    <input class="center-block" id="txtToAddr" type="text" size="50" value="0xEc2182D9Af459DA643AaA4A9FA621aADddB8ecfF"/>
+                </div>
+
+                <div class="row">
+                    <button class="btn btn-custom center-block" id="btnTokensOf" style="margin-top: 10px">view your tokens</button>
+                </div>
+            </div>
+
+            <!-- panel starts -->
+            <div class="panel panel-default" style="margin-top:20px;">
+                <div class="panel-heading bg-teal text-center">Your Tokens</div>
+                <table class="table small ">
+                    <thead>
+                        <tr class="">
+                            <th>T.ID</th>
+                            <th>Name</th>
+                            <th>Data</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        <tr>
+                            <th scope="row">
+                                <img id="detail-icon-img" src="img/fancoin1.png" alt="bitcoin, cash, coin, currency, dollar, euro, finance icon" width="50" height="50">
+                                <p class="text-center">101</p>
+                            </th>
+                            <td>Shaun White</td>
+                            <td>Shaun White 31 wins his third gold medal in snowboarding halfpipe and the 100th gold medal for Team USA</td>
+                            <td>
+                                <a href="coinDetails.html">
+                                    <button type="submit" class="btn btn-custom">details</button>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <img id="detail-icon-img" src="img/fancoin2.png" alt="bitcoin, cash, coin, currency, dollar, euro, finance icon" width="50" height="50">
+                                <p class="text-center">102</p>
+                            </th>
+                            <td>Redmond Gerard</td>
+                            <td>Red Gerard 17 wins the first gold medal for team USA in the 2018 Olympics</td>
+                            <td>
+                                <button type="submit" class="btn btn-custom">details</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <img id="detail-icon-img" src="img/fancoin3.png" alt="bitcoin, cash, coin, currency, dollar, euro, finance icon" width="50" height="50">
+                                <p class="text-center">103</p>
+                            </th>
+                            <td>Arielle Gold</td>
+                            <td>Arielle Gold 21 wins the bronze medal for Team USA in snowboard halfpipe</td>
+                            <td>
+                                <button type="submit" class="btn btn-custom">details</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="">
+                <div class="row">
+                    <img class="img-responsive center-block" style="width:200px" src="img/coin.png">
+                </div>
+            </div>
+
+
+
+            <!-- dynamic panel starts -->
+            <!-- <div class="panel panel-default" style="margin-top:20px;">
+                <div class="panel-heading bg-teal text-center">Your Tokens</div>
+                <table class="table small ">
+                    <thead>
+                        <tr class="">
+                            <th>Coin</th>
+                            <th>T.ID</th>
+                            <th>Data</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lst" class="">
+                    </tbody>
+                </table>
+            </div>  -->
+            <!-- dynamic ends -->
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <hr>
+        <footer class="text-muted" style="padding: 30px 0;">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-12">
+                <p>&copy; 2018 Fan Coin. All rights reserved.</p>
+             </div> <!--col-->
+            </div><!--row-->
+          </div><!--container-->
+        </footer>
+    </div>
+
+</body>
+
+
+
+</html>

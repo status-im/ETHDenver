@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Fan Coin</title>
+
+    <!-- added link and src start -->
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+      integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+      crossorigin="anonymous"></script>
+
+    <!-- have to use web3 0.20 (the same version as the one used in remix.  using web3 0.18 doesn't work. -->
+    <script src="web3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/js.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/nav-underline.css" rel="stylesheet">
+    <link href="css/material-icon-size.css" rel="stylesheet">
+    <link href="css/profile-image.css" rel="stylesheet">
+    <link href="css/coinFlip.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- added link and src end -->
+
+
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+  </head>
+
+  <body>
+    <!-- nav start -->
+    <nav class="navbar navbar-fixed-top">
+        <div class="navbar-container">
+            <div class="navbar-header">
+              <!-- <button id="nav-toggle-button" type="button" class="text-white navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button> -->
+
+            <button id="nav-toggle-button" type="button" class="text-white navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <i class="material-icons">dehaze</i>
+            </button>
+
+              <a class="navbar-brand text-white" href="#">Fan Coin</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <form class="navbar-form navbar-right">
+                <div class="">
+                    <ul>
+                        <li class="nav-link active-link">
+                            <a href="#">Home
+                            </a>
+                            <div class="underline"></div>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">About Us</a>
+                            <div class="underline"></div>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">Contact</a>
+                            <div class="underline"></div>
+                        </li>
+                    </ul>
+                </div>
+
+              </form>
+            </div><!--/.navbar-collapse -->
+        </div>
+    </nav>
+    <!-- nav end -->
+
+    <!-- content -->
+    <div class="container" style="padding-top:1em;">
+      <div class="paper card">
+        <div class="container-fluid">
+          <div class="row text-center">
+            <!-- <iframe width="640" height="360" src="https://www.youtube.com/watch?v=k6NTcNFjVjE&autoplay=1&start=90" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
+            <a href="https://www.youtube.com/watch_popup?v=k6NTcNFjVjE#t=0m0s">
+              <div class="image-blurred-edge center-block img-responsive"></div>
+            </a>
+            <!-- <video width="400" controls>
+              <source src="mov_bbb.mp4" type="video/mp4">
+              <source src="mov_bbb.ogg" type="video/ogg">
+              Your browser does not support HTML5 video.
+            </video> -->
+
+          </div>
+
+          <div class="row">
+            <h1 class="coinInfo gold text-center" >Winter Olympics 2018</h1>
+            <h4 class="coinInfo gold text-center" >Pyeong Chang, Korea</h4>
+            <div class="col-12 center-block">
+              <div id="coin-flip-cont" class="center-block">
+                <div id="coin" class="center-block">
+                  <div class="front frontmain">
+                    <img class="thisCoin" src="img/coin.png"/>
+                  </div>
+                  <div class="back backmain">
+                    <img class="thisCoin" src="img/shaun.png"/>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- .col -->
+          </div>
+
+          <div class="row">
+            <!-- <div class="cards"> -->
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="card card-3">
+                    <h4 class="">Shaun White</h4>
+                    <!-- <i class="material-icons">bubble_chart</i> -->
+                    <h5 class="small">Player name</h5>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="card card-3">
+                    <h4 class="">Snowboarding Halfpipe</h4>
+                    <!-- i class="material-icons">bubble_chart</i> -->
+                    <h5 class="small">Sport</h5>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="card card-3">
+                    <h4 class="">2018 Olympic Winter Games Pyeongchang</h4>
+                    <h5 class="small">Year</h5>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card card-3">
+                    <h4 class="">Shaun White 31 wins his third gold medal in snowboarding halfpipe and the 100th gold medal for Team USA</h4>
+                    <h5 class="small">Data</h5>
+                </div>
+            </div>
+          </div> <!-- .row -->
+            <!-- <div class="col-sm-6 col-sm-6 col-md-6 col-lg-6">
+                <h4 class="coinInfo">Player name</h4>
+                <h4 class="coinInfo">date</h4>
+                <h4 class="coinInfo">Score: xyz</h4>
+                <h4 class="coinInfo">Goal Time: 1:30:00</h4>
+            </div> --> <!-- .col -->
+
+          <div class="row">
+            <button class="btn btn-custom center-block" id="btnTokensOf" style="margin-top: 10px">sell your token</button>
+          </div> <!-- .row -->
+        </div> <!-- .container-fluid -->
+      </div> <!-- .paper -->
+    </div> <!-- .container -->
+
+    <div class="container-fluid">
+        <hr>
+        <footer class="text-muted" style="padding: 30px 0;">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-12">
+                <p>&copy; 2018 Fan Coin. All rights reserved.</p>
+             </div> <!--col-->
+            </div><!--row-->
+          </div><!--container-->
+        </footer>
+    </div>
+
+  </body>
+</html>

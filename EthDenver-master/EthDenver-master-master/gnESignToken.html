@@ -1,0 +1,551 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+    <!-- have to use web3 0.20 (the same version as the one used in remix.  using web3 0.18 doesn't work. -->
+    <script src="web3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <title>Uber Sign</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+        div.background {
+            background: #961432;
+            color: white;
+            margin: 0px;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        body{
+            margin:0px;
+            padding:0px;
+        }
+
+</style>
+
+<body>
+    <div class="background">
+            Uber Sign
+    </div>
+    <br/>
+    <div class="container">
+
+        <label>Token Id: </label>
+        <input id="txtTokenId" type="text" size="8" placeholder="integer" value="15" />
+        <br/>
+        <label>From Addr: </label>
+        <input id="txtFromAddr" type="text" size="50" value="0xcfEfDc31c1464B9793533cac2f297205cD9FC181" />
+        <br/>
+        <label>To Addr: </label>
+        <input id="txtToAddr" type="text" size="50" value="0xEc2182D9Af459DA643AaA4A9FA621aADddB8ecfF" />
+        <br/>
+        <label>Metadata: </label>
+        <input id="txtMetadata" type="text" size="100" value="" />
+        <div class="d-block">
+            <button id="btnMint">Mint</button>
+            <button id="btnSetMetadata">Set Metadata</button>
+            <button id="btnTransfer">Transfer</button>
+            <button id="btnOwnerOf">Token Owner</button>
+            <button id="btnMetaData">Meta Data</button>
+        </div>
+    </div>
+</body>
+<script>
+
+
+    if (typeof web3 !== 'undefined') {
+        console.log("web3 already defined");
+        web3 = new Web3(web3.currentProvider);
+    } else {
+        // set the provider you want from Web3.providers
+        console.log("new web3");
+        //web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    }
+
+    //web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    //web3 = new Web3(new Web3.providers.HttpProvider("https://sokol.poa.network"));
+
+
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+    var defaultAccount = web3.eth.accounts[0];
+    console.log("default account: ", defaultAccount);
+
+
+    var abi = [
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "ownerOf",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "_owner",
+                    "type": "address"
+                }
+            ],
+            "name": "tokensOf",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256[]"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "tokenMetadata",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "approvedFor",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "symbol",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "pure",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "_owner",
+                    "type": "address"
+                }
+            ],
+            "name": "balanceOf",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "totalSupply",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "name",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "pure",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "name": "_owner",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "name": "_approved",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Approval",
+            "type": "event"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "name": "_from",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Transfer",
+            "type": "event"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "approve",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "takeOwnership",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                },
+                {
+                    "name": "metadata",
+                    "type": "string"
+                }
+            ],
+            "name": "setMetadata",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "name": "_tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "mint",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ];
+
+
+    var contractAddr = "0x69b93a54c0e19f6599f548c0a6d69cb0cf106798";
+
+    var erc721Contract = web3.eth.contract(abi);
+    var erc721 = erc721Contract.at(contractAddr);
+    console.log(erc721);
+
+
+    //var fromAddr = "0xDb7B6029B531Be675733DeC2AA5554Ca457BD6F6";
+    //var toAddr = "0x19eD4B1F0EF47306a72ea5A093e7F73a8d70F359";
+    //var tokenId = 14;
+
+    $("#btnMint").click(function () {
+        var addr = $("#txtFromAddr").val();
+        var tokenId = parseInt($("#txtTokenId").val());
+        erc721.mint(addr, tokenId, function (error, result) {
+            if (!error) {
+                console.log(result);
+            } else {
+                console.error(error);
+            }
+        });
+    })
+
+    $("#btnTransfer").click(function () {
+        var toAddr = $("#txtToAddr").val();
+        var tokenId = parseInt($("#txtTokenId").val());
+        // does not work until a later time (presumably has to wait until all elements loaded).
+        erc721.transfer(toAddr, tokenId, function (error, result) {
+            if (!error) {
+                console.log(result);
+            } else {
+                console.error(error);
+            }
+
+
+        });
+
+    });
+
+    // call hybris to update coin
+    function callHybris() {
+        $.ajax({
+            url: 'https://api.us.yaas.io/hybris/oauth2/v1/token',
+            type: 'post',
+            data:
+                "grant_type=client_credentials&scope=hybris.tenant=fcbh02 hybris.profile_view hybris.profile_manage&client_id=vyXkf3Zg50TrVY64t50VkdTdlmhO4mIJ&client_secret=8lR2k6P398Zz6HA5"
+            ,
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'  //If your header name has spaces or any other char not appropriate
+            },
+            dataType: 'json',
+            success: function (data) {
+                var token = data.access_token;
+                var profile_id = "d9fc8313-766c-4c8c-b9ce-8f3211fad634";
+                $.ajax({
+                    url: 'https://api.yaas.io/hybris/profile/v1/fcbh02/profiles/d9fc8313-766c-4c8c-b9ce-8f3211fad634',
+                    type: 'get',
+
+                    headers: {
+                        Authorization: "Bearer " + token   //If your header name has spaces or any other char not appropriate
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        var retrievedObject = JSON.parse(localStorage.getItem('scoreMeta'));
+
+                        data.extensions.fanCoin.fanCoinCache.coins.push({
+                            "gameId": "287346827350",
+                            "date": retrievedObject.timestamp,
+                            "coinId": "dskfjhsdfkgj",
+                            "score": retrievedObject.score,
+                            "game": retrievedObject.competition,
+                            "playerName": retrievedObject.player,
+                            "links": {
+                                "videoUrl": "https://www.youtube.com/embed/bQsr_mZjgaA?autoplay=1",
+                                "photoUrl": "https://media.gettyimages.com/photos/ivica-olic-of-bayern-scores-his-teams-first-goal-during-the-match-picture-id98516117"
+                            },
+                            "playerId": "134214321",
+                            "rarity": "Historical"
+                        });
+                        $.ajax({
+                            url: 'https://api.yaas.io/hybris/profile/v1/fcbh02/profiles/d9fc8313-766c-4c8c-b9ce-8f3211fad634',
+                            type: 'patch',
+                            data: JSON.stringify(data),
+                            headers: {
+                                Authorization: "Bearer " + token,   //If your header name has spaces or any other char not appropriate
+                                "Content-Type": 'application/json',
+                                "consent-reference": profile_id
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log("Success update");
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    $("#btnSetMetadata").click(function () {
+        var tokenId = parseInt($("#txtTokenId").val());
+        var metadata = $("#txtMetadata").val();
+        // does not work until a later time (presumably has to wait until all elements loaded).
+        erc721.setMetadata(tokenId, metadata, function (error, result) {
+            if (!error) {
+                console.log(result);
+            } else {
+                console.error(error);
+            }
+
+
+        });
+
+    });
+
+    $("#btnTokenMetadata").click(function () {
+        var tokenId = parseInt($("#txtTokenId").val());
+        erc721.tokenMetadata(tokenId, function (error, result) {
+            if (!error) {
+                console.log(result);
+            } else {
+                console.error(error);
+            }
+        });
+    });
+
+    $("#btnOwnerOf").click(function () {
+        var tokenId = parseInt($("#txtTokenId").val());
+        erc721.ownerOf(tokenId, function (error, result) {
+            if (!error) {
+                console.log(result);
+            } else {
+                console.error(error);
+            }
+        });
+    })
+
+    $("#btnTokensOf").click(function () {
+        var addr = $("#txtToAddr").val();
+        erc721.tokensOf(addr, function (error, result) {
+            if (!error) {
+                console.log(result);
+            } else {
+                console.error(error);
+            }
+        });
+    })
+
+    function readBalance(contract, addr) {
+        contract.balanceOf(addr, function (error, result) {
+            if (!error) {
+                console.log(result);
+                console.log("balance=" + result.c[0]);
+            } else {
+                console.error(error);
+            }
+        });
+    };
+
+    $("#btnBalance").click(function () {
+        var toAddr = $("#txtToAddr").val();
+        readBalance(erc721, toAddr);
+    });
+
+    $("#btnMetaData").click(function () {
+        loadMeta();
+    });
+
+    function loadScore() {
+        var scoreIndex = 0;
+        // Retrieve the object from storage
+        var retrievedObject = localStorage.getItem('scoreIndex');
+        if (retrievedObject == undefined) {
+            // Put the object into storage
+            localStorage.setItem('scoreIndex', "0");
+        } else {
+            scoreIndex = parseInt(retrievedObject) + 1
+            localStorage.setItem('scoreIndex', scoreIndex);
+        }
+
+        $.getJSON("https://cf-nodejs-interested-giraffe.cfapps.eu10.hana.ondemand.com/getScore", function (data) {
+            if (scoreIndex == data.length) {
+                $('#txtMetadata').val("All Coin Generated");
+                localStorage.clear();
+            } else {
+                localStorage.setItem('scoreMeta', JSON.stringify(data[scoreIndex]));
+                $('#txtMetadata').val(JSON.stringify(data[scoreIndex]));
+            }
+        });
+    };
+
+    function loadMeta(){
+    	$('#txtMetadata').val("https://sandbox.esignlive.com/a/transaction/yrLj_HHPV7ipFj_UdS5OzpBS_w0=");
+
+    }
+
+</script>
+
+
+</html>
